@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalle de Prenda</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+
+<div class="container mt-5">
+    <a href="/" class="btn btn-outline-secondary mb-4">⬅ Volver al Catálogo</a>
+
+    <div class="card shadow-lg border-0">
+        <div class="row g-0">
+            <div class="col-md-6">
+                <img src="{{ url_for('static', filename='uploads/' + prenda.imagen) }}" class="img-fluid rounded-start h-100" style="object-fit: cover; max-height: 600px; width: 100%;" alt="{{ prenda.nombre }}">
+            </div>
+
+            <div class="col-md-6">
+                <div class="card-body p-5">
+                    <h2 class="card-title fw-bold display-5">{{ prenda.nombre }}</h2>
+
+                    <h3 class="text-success fw-bold mb-4">${{ prenda.precio | int }} USD</h3>
+
+                    <p class="card-text lead text-muted mb-4">{{ prenda.descripcion }}</p>
+
+                    <ul class="list-group list-group-flush mb-4 fs-5">
+                        <li class="list-group-item bg-transparent px-0"><strong>Talla disponible:</strong> <span class="badge bg-dark">{{ prenda.talla }}</span></li>
+                        <li class="list-group-item bg-transparent px-0"><strong>Color:</strong> {{ prenda.color }}</li>
+                        <li class="list-group-item bg-transparent px-0"><strong>Stock:</strong> {{ prenda.stock }} unidades</li>
+                    </ul>
+
+                    <div class="d-grid gap-2 mt-4">
+                        <button class="btn btn-success btn-lg disabled">🛒 Añadir al carrito (Próximamente)</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

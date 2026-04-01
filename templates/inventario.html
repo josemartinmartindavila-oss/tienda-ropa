@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gestión de Inventario</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+
+<div class="container mt-5">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>📦 Gestión de Inventario</h2>
+    <div>
+      <a href="/" class="btn btn-outline-secondary">Ver Catálogo</a>
+      <a href="/agregar" class="btn btn-primary">➕ Nueva Prenda</a>
+    </div>
+  </div>
+
+  <div class="card shadow-sm">
+    <div class="card-body p-0">
+      <table class="table table-hover mb-0 text-center align-middle">
+        <thead class="table-dark">
+        <tr>
+          <th>ID</th>
+          <th>Prenda</th>
+          <th>Talla</th>
+          <th>Color</th>
+          <th>Precio</th>
+          <th>Stock</th>
+          <th>Acciones</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for prenda in prendas %}
+        <tr>
+          <td>{{ prenda.id }}</td>
+          <td class="text-start fw-bold">{{ prenda.nombre }}</td>
+          <td>{{ prenda.talla }}</td>
+          <td>{{ prenda.color }}</td>
+          <td class="text-success fw-bold">${{ prenda.precio | int }}</td>
+          <td>
+                            <span class="badge {% if prenda.stock > 0 %}bg-primary{% else %}bg-danger{% endif %} fs-6">
+                                {{ prenda.stock }}
+                            </span>
+          </td>
+          <td>
+            <a href="/editar/{{ prenda.id }}" class="btn btn-warning btn-sm">✏️ Editar</a>
+
+            <form action="/eliminar/{{ prenda.id }}" method="POST" style="display:inline;" onsubmit="return confirm('¿Estás seguro de que deseas eliminar esta prenda? Esta acción no se puede deshacer.');">
+              <button type="submit" class="btn btn-danger btn-sm">🗑️ Eliminar</button>
+            </form>
+          </td>
+        </tr>
+        {% else %}
+        <tr>
+          <td colspan="7" class="text-muted py-4">No hay prendas registradas en el inventario.</td>
+        </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
