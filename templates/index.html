@@ -8,15 +8,67 @@
 </head>
 <body class="bg-light">
 
-<div class="container mt-5">
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4 shadow-sm">
+    <div class="container">
+        <a class="navbar-brand fw-bold" href="/">👕 Mi Tienda</a>
+        <div class="d-flex align-items-center">
+            {% if current_user.is_authenticated %}
+            <span class="navbar-text me-3 text-white fw-bold">Hola, {{ current_user.nombre }}</span>
+            <a href="/inventario" class="btn btn-outline-light me-2">📦 Inventario</a>
+            <a href="/logout" class="btn btn-danger">Cerrar Sesión</a>
+            {% else %}
+            <a href="/login" class="btn btn-outline-light me-2">🔑 Iniciar Sesión</a>
+            <a href="/registro" class="btn btn-primary">Registrarse</a>
+            {% endif %}
+        </div>
+    </div>
+</nav>
 
-    <div class="text-center mb-5">
-        <h1 class="display-4 fw-bold">Nuestro Catálogo 👕</h1>
-        <p class="lead text-muted">Explora la ropa disponible en nuestra tienda.</p>
-        <a href="/agregar" class="btn btn-primary shadow mt-2">➕ Agregar Nueva Prenda</a>
+<div class="container mt-4">
+
+    <form action="/" method="GET" class="mb-5">
+        <div class="input-group input-group-lg shadow-sm">
+            <input type="text" name="buscar" class="form-control border-primary" placeholder="Buscar prenda por nombre..." value="{{ busqueda or '' }}">
+            <button type="submit" class="btn btn-primary">🔍 Buscar</button>
+        </div>
+    </form>
+
+    {% if destacadas and not busqueda %}
+    <div class="mb-5 p-4 bg-warning bg-opacity-10 rounded-3 border border-warning shadow-sm">
+        <h2 class="display-6 fw-bold text-warning mb-4">⭐ Novedades Destacadas</h2>
+        <div class="row row-cols-1 row-cols-md-3 g-4">
+            {% for prenda in destacadas %}
+            <div class="col">
+                <div class="card h-100 shadow border-warning border-2">
+                    <img src="{{ url_for('static', filename='uploads/' + prenda.imagen) }}" class="card-img-top" alt="{{ prenda.nombre }}" style="height: 250px; object-fit: cover;">
+                    <div class="card-body bg-white text-center">
+                        <h5 class="card-title fw-bold">{{ prenda.nombre }}</h5>
+                        <h4 class="text-success fw-bold">${{ prenda.precio | int }} USD</h4>
+                    </div>
+                    <div class="card-footer bg-warning border-0 text-center p-0">
+                        <a href="/prenda/{{ prenda.id }}" class="btn btn-warning text-dark w-100 fw-bold py-2">Ver Detalles</a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+
+    <div class="text-center mb-4">
+        <h2 class="display-6 fw-bold">
+            {% if busqueda %}
+            Resultados para: <span class="text-primary">"{{ busqueda }}"</span>
+            {% else %}
+            Nuestro Catálogo Completo 👕
+            {% endif %}
+        </h2>
+        {% if not busqueda %}
+        <p class="lead text-muted">Explora toda la ropa disponible en nuestra tienda.</p>
+        {% endif %}
     </div>
 
-    <div class="row row-cols-1 row-cols-md-3 g-4">
+    <div class="row row-cols-1 row-cols-md-3 g-4 mb-5">
 
         {% for prenda in prendas %}
         <div class="col">
@@ -42,8 +94,14 @@
 
         {% else %}
         <div class="col-12 text-center mt-5">
-            <h4 class="text-muted">Aún no hay prendas en el catálogo.</h4>
-            <p>Haz clic en el botón azul de arriba para agregar tu primera prenda.</p>
+            <h4 class="text-muted">Aún no hay prendas o no se encontraron resultados.</h4>
+            {% if busqueda %}
+            <a href="/" class="btn btn-primary mt-3">Volver al catálogo completo</a>
+            {% else %}
+            {% if current_user.is_authenticated %}
+            <a href="/inventario" class="btn btn-primary mt-3">Ir al inventario a agregar ropa</a>
+            {% endif %}
+            {% endif %}
         </div>
         {% endfor %}
 
