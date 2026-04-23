@@ -2,7 +2,7 @@ from flask import Flask, render_template, request, redirect, url_for, flash
 from flask_sqlalchemy import SQLAlchemy
 import os
 from werkzeug.utils import secure_filename
-# --- NUEVAS HERRAMIENTAS DE SEGURIDAD ---
+# herramientas de seguridad
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
 
@@ -19,7 +19,7 @@ os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
 
 db = SQLAlchemy(app)
 
-# --- CONFIGURACIÓN DE FLASK-LOGIN ---
+# FLASK-LOGIN
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = 'login' # Si alguien sin permiso intenta entrar, lo manda aquí
@@ -29,7 +29,7 @@ login_manager.login_message = "Por favor, inicia sesión para acceder a esta pá
 def load_user(user_id):
     return Usuario.query.get(int(user_id))
 
-# --- MODELOS DE BASE DE DATOS ---
+# BD
 
 # Tabla 1: Usuarios
 class Usuario(UserMixin, db.Model):
@@ -54,9 +54,7 @@ with app.app_context():
     db.create_all()
 
 
-# --- RUTAS DE LA APLICACIÓN ---
-
-# RUTA ACTUALIZADA: Catálogo, Búsqueda (HU 06) y Destacadas (HU 14)
+# Catálogo, Búsqueda
 @app.route('/')
 def index():
     palabra_busqueda = request.args.get('buscar')
@@ -76,7 +74,7 @@ def index():
                            busqueda=palabra_busqueda)
 
 
-# --- RUTAS PROTEGIDAS CON @login_required ---
+# ruta login
 
 @app.route('/inventario')
 @login_required
@@ -143,15 +141,13 @@ def eliminar_prenda(id):
     return redirect(url_for('inventario'))
 
 
-# --- RUTA PÚBLICA DE DETALLES ---
-
 @app.route('/prenda/<int:id>')
 def detalle_prenda(id):
     prenda_seleccionada = Prenda.query.get_or_404(id)
     return render_template('detalle.html', prenda=prenda_seleccionada)
 
 
-# --- RUTAS DE SEGURIDAD (HU 01, 02 y 03) ---
+# registro
 
 @app.route('/registro', methods=['GET', 'POST'])
 def registro():
