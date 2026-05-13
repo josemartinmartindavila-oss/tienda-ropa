@@ -1,44 +1,110 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Detalle de Prenda</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
-<body class="bg-light">
+{% extends 'base.html' %}
 
-<div class="container mt-5">
-    <a href="/" class="btn btn-outline-secondary mb-4">⬅ Volver al Catálogo</a>
+{% block title %}{{ prenda.nombre }} - Tienda de Ropa Premium{% endblock %}
 
-    <div class="card shadow-lg border-0">
-        <div class="row g-0">
-            <div class="col-md-6">
-                <img src="{{ url_for('static', filename='uploads/' + prenda.imagen) }}" class="img-fluid rounded-start h-100" style="object-fit: cover; max-height: 600px; width: 100%;" alt="{{ prenda.nombre }}">
-            </div>
+{% block content %}
+    <div class="mt-3 mb-5">
+        <!-- Breadcrumb -->
+        <nav aria-label="breadcrumb" class="mb-4">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/" class="text-primary text-decoration-none"><i class="fas fa-home me-1"></i>Catálogo</a></li>
+                <li class="breadcrumb-item active">{{ prenda.nombre }}</li>
+            </ol>
+        </nav>
 
-            <div class="col-md-6">
-                <div class="card-body p-5">
-                    <h2 class="card-title fw-bold display-5">{{ prenda.nombre }}</h2>
+        <div class="card shadow-lg border-0">
+            <div class="row g-0">
+                <!-- Imagen del Producto -->
+                <div class="col-md-6">
+                    <div class="position-relative overflow-hidden" style="height: 600px;">
+                        <img src="{{ url_for('static', filename='uploads/' + prenda.imagen) }}"
+                             class="img-fluid w-100 h-100"
+                             style="object-fit: cover;"
+                             alt="{{ prenda.nombre }}">
+                    </div>
+                </div>
 
-                    <h3 class="text-success fw-bold mb-4">${{ prenda.precio | int }} USD</h3>
+                <!-- Detalles del Producto -->
+                <div class="col-md-6">
+                    <div class="card-body p-5">
+                        <!-- Nombre -->
+                        <h2 class="card-title fw-bold display-5 mb-2">{{ prenda.nombre }}</h2>
 
-                    <p class="card-text lead text-muted mb-4">{{ prenda.descripcion }}</p>
+                        <!-- Rating/Estrellas (simulado) -->
+                        <div class="mb-3">
+                            <span class="text-warning">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star-half-alt"></i>
+                            </span>
+                            <span class="text-muted small ms-2">(127 reseñas)</span>
+                        </div>
 
-                    <ul class="list-group list-group-flush mb-4 fs-5">
-                        <li class="list-group-item bg-transparent px-0"><strong>Talla disponible:</strong> <span class="badge bg-dark">{{ prenda.talla }}</span></li>
-                        <li class="list-group-item bg-transparent px-0"><strong>Color:</strong> {{ prenda.color }}</li>
-                        <li class="list-group-item bg-transparent px-0"><strong>Stock:</strong> {{ prenda.stock }} unidades</li>
-                    </ul>
+                        <!-- Precio Principal -->
+                        <div class="mb-4 p-4 bg-success bg-opacity-10 rounded-3 border border-success">
+                            <div class="text-success fw-bold mb-1">Precio Especial</div>
+                            <h3 class="text-success fw-bold display-4 mb-0">${{ prenda.precio | int }} USD</h3>
+                        </div>
 
-                    <div class="d-grid gap-2 mt-4">
-                        <button class="btn btn-success btn-lg disabled">🛒 Añadir al carrito (Próximamente)</button>
+                        <!-- Descripción -->
+                        <p class="card-text lead text-muted mb-4">{{ prenda.descripcion }}</p>
+
+                        <!-- Detalles Técnicos -->
+                        <div class="mb-4">
+                            <h6 class="fw-bold text-uppercase mb-3">Especificaciones</h6>
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item bg-transparent px-0 py-2">
+                                    <span class="fw-bold">Talla:</span>
+                                    <span class="badge bg-primary ms-2">{{ prenda.talla }}</span>
+                                </li>
+                                <li class="list-group-item bg-transparent px-0 py-2">
+                                    <span class="fw-bold">Color:</span>
+                                    <span class="badge bg-secondary ms-2">{{ prenda.color }}</span>
+                                </li>
+                                <li class="list-group-item bg-transparent px-0 py-2">
+                                    <span class="fw-bold">Stock Disponible:</span>
+                                    <span class="badge {% if prenda.stock > 5 %}bg-success{% elif prenda.stock > 0 %}bg-warning{% else %}bg-danger{% endif %} ms-2">
+                                        {{ prenda.stock }} unidades
+                                    </span>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <hr class="my-4">
+
+                        <!-- Acciones -->
+                        <div class="d-grid gap-2 mt-4">
+                            {% if prenda.stock > 0 %}
+                            <button class="btn btn-success btn-lg disabled" disabled>
+                                <i class="fas fa-shopping-cart me-2"></i>Añadir al carrito (Próximamente)
+                            </button>
+                            <button class="btn btn-outline-secondary btn-lg disabled" disabled>
+                                <i class="fas fa-heart me-2"></i>Agregar a favoritos (Próximamente)
+                            </button>
+                            {% else %}
+                            <button class="btn btn-danger btn-lg" disabled>
+                                <i class="fas fa-ban me-2"></i>Agotado
+                            </button>
+                            {% endif %}
+                        </div>
+
+                        <!-- Info Adicional -->
+                        <div class="mt-4 p-3 bg-light rounded-3 text-center">
+                            <i class="fas fa-shipping-fast text-primary me-2"></i>
+                            <span class="text-muted small">Envío gratis en compras mayores a $50</span>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-</div>
 
-</body>
-</html>
+        <!-- Volver al Catálogo -->
+        <div class="mt-4">
+            <a href="/" class="btn btn-outline-primary">
+                <i class="fas fa-arrow-left me-2"></i>Volver al Catálogo
+            </a>
+        </div>
+    </div>
+{% endblock %}

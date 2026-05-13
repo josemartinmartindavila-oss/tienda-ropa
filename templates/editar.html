@@ -1,74 +1,167 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Editar Prenda</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
-<body class="bg-light">
+{% extends 'base.html' %}
 
-<div class="container mt-5">
+{% block title %}Editar Prenda - Tienda de Ropa Premium{% endblock %}
+
+{% block content %}
   <div class="row justify-content-center">
     <div class="col-md-8">
-      <div class="card shadow">
-        <div class="card-header bg-warning text-dark text-center">
-          <h4>✏️ Editar Prenda: {{ prenda.nombre }}</h4>
+      <!-- Header -->
+      <div class="mb-4">
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/" class="text-primary text-decoration-none">Catálogo</a></li>
+            <li class="breadcrumb-item"><a href="/inventario" class="text-primary text-decoration-none">Inventario</a></li>
+            <li class="breadcrumb-item active">Editar Prenda</li>
+          </ol>
+        </nav>
+      </div>
+
+      <!-- Card Principal -->
+      <div class="card shadow-lg border-0">
+        <!-- Header del Card -->
+        <div class="card-header bg-gradient border-0 p-4" style="background: linear-gradient(135deg, var(--brand-secondary), #f0ad4e);">
+          <div class="d-flex align-items-center">
+            <i class="fas fa-edit text-white me-3" style="font-size: 1.5rem;"></i>
+            <div>
+              <h5 class="text-white mb-1">Editar Prenda</h5>
+              <p class="text-white-50 mb-0 small">{{ prenda.nombre }}</p>
+            </div>
+          </div>
         </div>
-        <div class="card-body p-4">
+
+        <!-- Body -->
+        <div class="card-body p-5">
           <form action="/editar/{{ prenda.id }}" method="POST" enctype="multipart/form-data">
 
-            <div class="mb-3">
-              <label class="form-label fw-bold">Nombre de la prenda</label>
-              <input type="text" name="nombre" class="form-control" value="{{ prenda.nombre }}" required>
+            <!-- Nombre -->
+            <div class="mb-4">
+              <label class="form-label fw-bold mb-2">
+                <i class="fas fa-tag me-2 text-primary"></i>Nombre de la Prenda
+              </label>
+              <input
+                type="text"
+                name="nombre"
+                class="form-control form-control-lg border-2"
+                value="{{ prenda.nombre }}"
+                required
+              >
             </div>
 
-            <div class="mb-3">
-              <label class="form-label fw-bold">Descripción</label>
-              <textarea name="descripcion" class="form-control" rows="3" required>{{ prenda.descripcion }}</textarea>
+            <!-- Descripción -->
+            <div class="mb-4">
+              <label class="form-label fw-bold mb-2">
+                <i class="fas fa-align-left me-2 text-primary"></i>Descripción
+              </label>
+              <textarea
+                name="descripcion"
+                class="form-control form-control-lg border-2"
+                rows="4"
+                required
+              >{{ prenda.descripcion }}</textarea>
             </div>
 
-            <div class="row">
-              <div class="col-md-3 mb-3">
-                <label class="form-label fw-bold">Talla</label>
-                <select name="talla" class="form-select" required>
+            <!-- Talla, Color, Precio, Stock -->
+            <div class="row mb-4">
+              <div class="col-md-3">
+                <label class="form-label fw-bold mb-2">
+                  <i class="fas fa-ruler me-2 text-primary"></i>Talla
+                </label>
+                <select name="talla" class="form-select form-select-lg border-2" required>
                   <option value="XS" {% if prenda.talla == 'XS' %}selected{% endif %}>XS</option>
                   <option value="S" {% if prenda.talla == 'S' %}selected{% endif %}>S</option>
                   <option value="M" {% if prenda.talla == 'M' %}selected{% endif %}>M</option>
                   <option value="L" {% if prenda.talla == 'L' %}selected{% endif %}>L</option>
                   <option value="XL" {% if prenda.talla == 'XL' %}selected{% endif %}>XL</option>
+                  <option value="XXL" {% if prenda.talla == 'XXL' %}selected{% endif %}>XXL</option>
                 </select>
               </div>
-              <div class="col-md-3 mb-3">
-                <label class="form-label fw-bold">Color</label>
-                <input type="text" name="color" class="form-control" value="{{ prenda.color }}" required>
+              <div class="col-md-3">
+                <label class="form-label fw-bold mb-2">
+                  <i class="fas fa-palette me-2 text-primary"></i>Color
+                </label>
+                <input
+                  type="text"
+                  name="color"
+                  class="form-control form-control-lg border-2"
+                  value="{{ prenda.color }}"
+                  required
+                >
               </div>
-              <div class="col-md-3 mb-3">
-                <label class="form-label fw-bold">Precio (USD)</label>
-                <input type="number" step="1" name="precio" class="form-control" value="{{ prenda.precio | int }}" required>
+              <div class="col-md-3">
+                <label class="form-label fw-bold mb-2">
+                  <i class="fas fa-dollar-sign me-2 text-primary"></i>Precio (USD)
+                </label>
+                <input
+                  type="number"
+                  step="1"
+                  name="precio"
+                  class="form-control form-control-lg border-2"
+                  value="{{ prenda.precio | int }}"
+                  required
+                >
               </div>
-              <div class="col-md-3 mb-3">
-                <label class="form-label fw-bold">Stock</label>
-                <input type="number" step="1" name="stock" class="form-control" value="{{ prenda.stock }}" required min="0">
+              <div class="col-md-3">
+                <label class="form-label fw-bold mb-2">
+                  <i class="fas fa-boxes me-2 text-primary"></i>Stock
+                </label>
+                <input
+                  type="number"
+                  step="1"
+                  name="stock"
+                  class="form-control form-control-lg border-2"
+                  value="{{ prenda.stock }}"
+                  min="0"
+                  required
+                >
               </div>
             </div>
 
+            <!-- Imagen -->
             <div class="mb-4">
-              <label class="form-label fw-bold">Fotografía (Opcional)</label>
-              <p class="text-muted small mb-2">Imagen actual: <strong>{{ prenda.imagen }}</strong>. Sube una nueva solo si deseas reemplazarla.</p>
-              <input type="file" name="imagen" class="form-control" accept=".jpg, .jpeg, .png">
+              <label class="form-label fw-bold mb-2">
+                <i class="fas fa-image me-2 text-primary"></i>Fotografía de la Prenda
+              </label>
+
+              <!-- Imagen Actual -->
+              <div class="mb-3">
+                <p class="text-muted small fw-bold mb-2">Imagen Actual:</p>
+                <div class="position-relative" style="width: 150px; height: 150px; overflow: hidden; border-radius: 8px; border: 2px solid var(--border-soft);">
+                  <img src="{{ url_for('static', filename='uploads/' + prenda.imagen) }}"
+                       class="w-100 h-100"
+                       style="object-fit: cover;"
+                       alt="{{ prenda.nombre }}">
+                </div>
+              </div>
+
+              <!-- Input Nueva Imagen -->
+              <p class="text-muted small mb-2">Subir una nueva imagen (opcional):</p>
+              <div class="input-group input-group-lg">
+                <input
+                  type="file"
+                  name="imagen"
+                  class="form-control border-2"
+                  accept=".jpg, .jpeg, .png"
+                >
+                <span class="input-group-text border-2 text-muted">JPG, PNG</span>
+              </div>
+              <small class="text-muted mt-2 d-block">
+                <i class="fas fa-info-circle me-1"></i>
+                Solo carga una nueva imagen si deseas reemplazar la actual
+              </small>
             </div>
 
-            <div class="d-grid gap-2">
-              <button type="submit" class="btn btn-warning">💾 Guardar Cambios</button>
-              <a href="/inventario" class="btn btn-outline-secondary">Cancelar y volver al inventario</a>
+            <!-- Acciones -->
+            <div class="d-grid gap-2 mb-3">
+              <button type="submit" class="btn btn-warning btn-lg fw-bold">
+                <i class="fas fa-save me-2"></i>Guardar Cambios
+              </button>
+              <a href="/inventario" class="btn btn-outline-secondary btn-lg fw-bold">
+                <i class="fas fa-times me-2"></i>Cancelar
+              </a>
             </div>
           </form>
         </div>
       </div>
     </div>
   </div>
-</div>
-
-</body>
-</html>
+{% endblock %}

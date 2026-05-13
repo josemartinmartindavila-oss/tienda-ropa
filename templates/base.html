@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Tienda de Ropa Premium{% endblock %}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="{{ url_for('static', filename='css/app.css') }}" rel="stylesheet">
+    {% block extra_head %}{% endblock %}
+</head>
+<body class="app-body">
+
+<!-- Navbar Premium -->
+<nav class="navbar navbar-expand-lg navbar-dark app-navbar sticky-top">
+    <div class="container-fluid px-4">
+        <a class="navbar-brand fw-bold fs-4" href="/">
+            <i class="fas fa-shopping-bag me-2"></i>TIENDILLA
+        </a>
+
+        <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto align-items-lg-center gap-2">
+                <li class="nav-item">
+                    <a class="nav-link text-white-50 hover-nav" href="/">Catálogo</a>
+                </li>
+                {% if current_user.is_authenticated %}
+                    <li class="nav-item">
+                        <span class="nav-link text-white fw-500">👤 {{ current_user.nombre }}</span>
+                    </li>
+                    {% if current_user.rol == 'admin' %}
+                    <li class="nav-item">
+                        <a href="/inventario" class="btn btn-sm btn-outline-light">
+                            <i class="fas fa-box me-1"></i> Inventario
+                        </a>
+                    </li>
+                    {% endif %}
+                    <li class="nav-item">
+                        <a href="/logout" class="btn btn-sm btn-danger">
+                            <i class="fas fa-sign-out-alt me-1"></i> Cerrar Sesión
+                        </a>
+                    </li>
+                {% else %}
+                    <li class="nav-item">
+                        <a href="/login" class="btn btn-sm btn-outline-light">
+                            <i class="fas fa-sign-in-alt me-1"></i> Iniciar Sesión
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/registro" class="btn btn-sm btn-primary">
+                            <i class="fas fa-user-plus me-1"></i> Registrarse
+                        </a>
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- Contenido Principal -->
+<main class="main-content">
+    <div class="container-fluid py-4 px-0">
+        {# Mensajes flash centralizados para todas las vistas #}
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {% for message in messages %}
+            <div class="alert alert-warning alert-dismissible fade show shadow-sm mb-4" role="alert">
+                <i class="fas fa-info-circle me-2"></i>{{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+            {% endfor %}
+        {% endif %}
+        {% endwith %}
+
+        {% block content %}{% endblock %}
+    </div>
+</main>
+
+<!-- Footer Profesional -->
+<footer class="app-footer mt-5 py-5">
+    <div class="container-lg">
+        <div class="row g-4 mb-4">
+            <div class="col-md-4">
+                <h5 class="fw-bold mb-3">
+                    <i class="fas fa-shopping-bag me-2"></i>TIENDILLA
+                </h5>
+                <p class="text-muted small">Tu tienda de ropa premium con la mejor selección de prendas de calidad.</p>
+            </div>
+            <div class="col-md-4">
+                <h6 class="fw-bold mb-3">Enlaces Rápidos</h6>
+                <ul class="list-unstyled small">
+                    <li><a href="/" class="text-muted text-decoration-none hover-link">Catálogo</a></li>
+                    <li><a href="/login" class="text-muted text-decoration-none hover-link">Mi Cuenta</a></li>
+                    {% if current_user.is_authenticated and current_user.rol == 'admin' %}
+                    <li><a href="/inventario" class="text-muted text-decoration-none hover-link">Gestionar Inventario</a></li>
+                    {% endif %}
+                </ul>
+            </div>
+            <div class="col-md-4">
+                <h6 class="fw-bold mb-3">Información</h6>
+                <ul class="list-unstyled small">
+                    <li class="mb-2"><i class="fas fa-envelope me-2 text-primary"></i><span class="text-muted">contacto@tiendilla.com</span></li>
+                    <li><i class="fas fa-phone me-2 text-primary"></i><span class="text-muted">+34 600 123 456</span></li>
+                </ul>
+            </div>
+        </div>
+        <hr class="my-4 border-secondary opacity-25">
+        <div class="text-center text-muted small">
+            <p>&copy; 2026 Tiendilla. Todos los derechos reservados.</p>
+        </div>
+    </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+{% block scripts %}{% endblock %}
+
+</body>
+</html>
+

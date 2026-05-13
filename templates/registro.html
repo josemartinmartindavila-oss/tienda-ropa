@@ -1,72 +1,126 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Registro de Usuario - Mi Tienda</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
-<body class="bg-light">
+{% extends 'base.html' %}
 
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4 shadow-sm">
-  <div class="container">
-    <a class="navbar-brand fw-bold" href="/">👕 Mi Tienda</a>
-    <div class="d-flex align-items-center">
-      <a href="/login" class="btn btn-outline-light">🔑 Iniciar Sesión</a>
-    </div>
-  </div>
-</nav>
+{% block title %}Crear Cuenta - Tienda de Ropa Premium{% endblock %}
 
-<div class="container mt-5">
-  <div class="row justify-content-center">
-    <div class="col-md-6">
+{% block content %}
+  <div class="row justify-content-center align-items-center" style="min-height: 70vh;">
+    <div class="col-md-6 col-lg-5">
       <div class="card shadow-lg border-0 rounded-3">
-        <div class="card-header bg-primary text-white text-center p-4">
-          <h4 class="mb-0">👤 Crear una Cuenta Nueva</h4>
+        <!-- Header -->
+        <div class="card-header bg-gradient border-0 p-5" style="background: linear-gradient(135deg, var(--brand-secondary), var(--brand-primary));">
+          <div class="text-center">
+            <div class="mb-3">
+              <i class="fas fa-user-plus text-white" style="font-size: 2.5rem;"></i>
+            </div>
+            <h4 class="text-white mb-1">Crear Cuenta Nueva</h4>
+            <p class="text-white-50 mb-0 small">Únete a Tiendilla hoy mismo</p>
+          </div>
         </div>
+
+        <!-- Body -->
         <div class="card-body p-5">
-
-          {% with messages = get_flashed_messages() %}
-          {% if messages %}
-          {% for message in messages %}
-          <div class="alert alert-warning text-center shadow-sm fw-bold">{{ message }}</div>
-          {% endfor %}
-          {% endif %}
-          {% endwith %}
-
           <form action="/registro" method="POST">
-            <div class="mb-3">
-              <label class="form-label fw-bold">Nombre completo</label>
-              <input type="text" name="nombre" class="form-control bg-light border-secondary" placeholder="Ej. Juan Pérez" required autofocus>
-            </div>
-
-            <div class="mb-3">
-              <label class="form-label fw-bold">Correo electrónico</label>
-              <input type="email" name="correo" class="form-control bg-light border-secondary" placeholder="tu@correo.com" required>
-            </div>
-
+            <!-- Nombre -->
             <div class="mb-4">
-              <label class="form-label fw-bold">Contraseña</label>
-              <input type="password" name="password" class="form-control bg-light border-secondary" required>
-              <div class="form-text">Por seguridad, tu contraseña será encriptada en nuestra base de datos.</div>
+              <label class="form-label fw-bold mb-2">
+                <i class="fas fa-user me-2 text-primary"></i>Nombre Completo
+              </label>
+              <input
+                type="text"
+                name="nombre"
+                class="form-control form-control-lg border-2"
+                placeholder="Ej. Juan Pérez"
+                required
+                autofocus
+              >
             </div>
 
-            <div class="d-grid gap-2">
-              <button type="submit" class="btn btn-primary btn-lg shadow">Registrarse</button>
+            <!-- Email -->
+            <div class="mb-4">
+              <label class="form-label fw-bold mb-2">
+                <i class="fas fa-envelope me-2 text-primary"></i>Correo Electrónico
+              </label>
+              <input
+                type="email"
+                name="correo"
+                class="form-control form-control-lg border-2"
+                placeholder="tu@correo.com"
+                required
+              >
+              <small class="text-muted">Usaremos esto para tu inicio de sesión</small>
+            </div>
 
-              <div class="mt-4 text-center">
-                <a href="/login" class="text-decoration-none fw-bold text-dark">¿Ya tienes cuenta? Inicia sesión aquí</a>
-                <br>
-                <a href="/" class="text-decoration-none text-muted small mt-3 d-inline-block">⬅ Cancelar y volver al catálogo</a>
-              </div>
+            <!-- Password -->
+            <div class="mb-4">
+              <label class="form-label fw-bold mb-2">
+                <i class="fas fa-lock me-2 text-primary"></i>Contraseña
+              </label>
+              <input
+                type="password"
+                name="password"
+                class="form-control form-control-lg border-2"
+                placeholder="Crea una contraseña segura"
+                required
+              >
+              <small class="text-muted">
+                <i class="fas fa-shield-alt me-1"></i>Tu contraseña está protegida con encriptación
+              </small>
+            </div>
+
+            <!-- Terms Checkbox -->
+            <div class="form-check mb-4">
+              <input class="form-check-input" type="checkbox" id="terms" required>
+              <label class="form-check-label" for="terms">
+                Acepto los <a href="#" class="text-primary text-decoration-none">términos y condiciones</a>
+              </label>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="d-grid gap-2 mb-4">
+              <button type="submit" class="btn btn-primary btn-lg fw-bold">
+                <i class="fas fa-check-circle me-2"></i>Crear Mi Cuenta
+              </button>
+            </div>
+
+            <!-- Divider -->
+            <div class="position-relative my-4">
+              <hr>
+              <span class="position-absolute top-50 start-50 translate-middle bg-white px-2 text-muted small">O</span>
+            </div>
+
+            <!-- Login Link -->
+            <div class="text-center">
+              <p class="text-muted mb-2">¿Ya tienes cuenta?</p>
+              <a href="/login" class="btn btn-outline-primary w-100 fw-bold">
+                <i class="fas fa-sign-in-alt me-2"></i>Iniciar Sesión
+              </a>
             </div>
           </form>
+        </div>
 
+        <!-- Footer -->
+        <div class="card-footer bg-light border-0 p-4 text-center">
+          <a href="/" class="text-muted text-decoration-none">
+            <i class="fas fa-arrow-left me-2"></i>Volver al Catálogo
+          </a>
+        </div>
+      </div>
+
+      <!-- Benefits Card -->
+      <div class="mt-4 row g-2">
+        <div class="col-6">
+          <div class="p-3 bg-success bg-opacity-10 rounded-3 text-center border border-success border-opacity-25">
+            <i class="fas fa-gift text-success me-2"></i>
+            <p class="small fw-bold text-dark mb-0">Ofertas Exclusivas</p>
+          </div>
+        </div>
+        <div class="col-6">
+          <div class="p-3 bg-info bg-opacity-10 rounded-3 text-center border border-info border-opacity-25">
+            <i class="fas fa-shipping-fast text-info me-2"></i>
+            <p class="small fw-bold text-dark mb-0">Envíos Rápidos</p>
+          </div>
         </div>
       </div>
     </div>
   </div>
-</div>
-
-</body>
-</html>
+{% endblock %}

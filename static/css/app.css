@@ -1,0 +1,1218 @@
+:root {
+    --brand-primary: #2563eb;
+    --brand-primary-dark: #1d4ed8;
+    --brand-secondary: #f59e0b;
+    --brand-accent: #10b981;
+    --text-main: #111827;
+    --text-muted: #6b7280;
+    --text-light: #d1d5db;
+    --surface: #ffffff;
+    --surface-soft: #f9fafb;
+    --surface-dark: #f3f4f6;
+    --border-soft: #e5e7eb;
+    --border-light: #f3f4f6;
+    --shadow-sm: 0 4px 12px rgba(17, 24, 39, 0.06);
+    --shadow-soft: 0 8px 24px rgba(17, 24, 39, 0.1);
+    --shadow-hover: 0 12px 32px rgba(17, 24, 39, 0.15);
+    --radius-sm: 8px;
+    --radius-md: 12px;
+    --radius-lg: 16px;
+}
+
+* {
+    transition: color 0.2s ease, background-color 0.2s ease, border-color 0.2s ease;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body.app-body {
+    background: linear-gradient(135deg, #f9fafb 0%, #f3f4f6 50%, #eff6ff 100%);
+    color: var(--text-main);
+    min-height: 100vh;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica', 'Arial', sans-serif;
+}
+
+/* ==================== NAVBAR ==================== */
+.app-navbar {
+    background: linear-gradient(90deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(10px);
+}
+
+.app-navbar .container-fluid {
+    padding-left: 12px;
+    padding-right: 12px;
+}
+
+.navbar-brand {
+    letter-spacing: 1px;
+    font-size: 1.4rem;
+    font-weight: 800;
+}
+
+.navbar-brand i {
+    animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-3px); }
+}
+
+.nav-link {
+    transition: all 0.3s ease !important;
+    font-weight: 500;
+}
+
+.hover-nav:hover {
+    color: var(--brand-secondary) !important;
+    transform: translateY(-2px);
+}
+
+/* ==================== MAIN CONTENT ==================== */
+.main-content {
+    flex: 1;
+    padding-bottom: 3rem;
+}
+
+/* Usar más espacio horizontal: reducir paddings y anchos por defecto */
+.container-fluid.px-4 {
+    padding-left: 1.25rem !important;
+    padding-right: 1.25rem !important;
+}
+
+/* ==================== CARDS ==================== */
+.card {
+    border: 1px solid var(--border-soft);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    overflow: hidden;
+}
+
+.card:hover {
+    transform: translateY(-6px);
+    box-shadow: var(--shadow-hover);
+    border-color: var(--brand-primary);
+}
+
+.card-header {
+    background: linear-gradient(90deg, var(--surface-dark), var(--surface));
+    border-bottom: 1px solid var(--border-soft);
+    font-weight: 600;
+}
+
+.card-footer {
+    background: var(--surface-soft);
+    border-top: 1px solid var(--border-soft);
+}
+
+.card-body {
+    padding: 1.5rem;
+}
+
+/* ==================== BOTONES ==================== */
+.btn {
+    border-radius: 8px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    transition: all 0.2s ease;
+    border: none;
+    padding: 0.6rem 1.4rem;
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, var(--brand-primary), var(--brand-primary-dark));
+    color: white;
+}
+
+.btn-primary:hover {
+    background: linear-gradient(135deg, var(--brand-primary-dark), #1438c4);
+    color: white;
+}
+
+.btn-secondary {
+    background: var(--surface-dark);
+    color: var(--text-main);
+}
+
+.btn-secondary:hover {
+    background: var(--border-soft);
+}
+
+.btn-outline-light {
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    color: white;
+}
+
+.btn-outline-light:hover {
+    border-color: white;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.btn-danger {
+    background: linear-gradient(135deg, #dc2626, #b91c1c);
+}
+
+.btn-danger:hover {
+    background: linear-gradient(135deg, #b91c1c, #991b1b);
+}
+
+/* ==================== BOTONES AVANZADOS ==================== */
+.btn-outline-primary {
+    border: 2px solid var(--brand-primary);
+    color: var(--brand-primary);
+    transition: all 0.2s ease;
+}
+
+.btn-outline-primary:hover {
+    background: var(--brand-primary);
+    color: white;
+    border-color: var(--brand-primary);
+}
+
+.btn-outline-secondary {
+    border: 2px solid var(--border-soft);
+    color: var(--text-main);
+    transition: all 0.2s ease;
+}
+
+.btn-outline-secondary:hover {
+    background: var(--surface-dark);
+    border-color: var(--text-muted);
+}
+
+.btn-outline-warning {
+    border: 2px solid var(--brand-secondary);
+    color: var(--brand-secondary);
+    transition: all 0.2s ease;
+}
+
+.btn-outline-warning:hover {
+    background: var(--brand-secondary);
+    color: white;
+    border-color: var(--brand-secondary);
+}
+
+.btn-outline-danger {
+    border: 2px solid #dc2626;
+    color: #dc2626;
+    transition: all 0.2s ease;
+}
+
+.btn-outline-danger:hover {
+    background: #dc2626;
+    color: white;
+    border-color: #dc2626;
+}
+
+.btn-warning {
+    background: linear-gradient(135deg, var(--brand-secondary), #f97316);
+    color: white;
+}
+
+.btn-warning:hover {
+    background: linear-gradient(135deg, #f97316, #ea580c);
+    color: white;
+}
+
+.btn-success {
+    background: linear-gradient(135deg, var(--brand-accent), #059669);
+}
+
+.btn-success:hover {
+    background: linear-gradient(135deg, #059669, #047857);
+}
+
+/* ==================== BOTONES DE GRUPO ==================== */
+.btn-group {
+    display: flex;
+    gap: 0.25rem;
+}
+
+.btn-group .btn {
+    flex: 1;
+    border-radius: 8px;
+}
+
+/* ==================== FORMULARIOS ==================== */
+.form-control,
+.form-select,
+.form-check-input {
+    border: 1.5px solid var(--border-soft);
+    border-radius: var(--radius-md);
+    padding: 0.75rem 1rem;
+    font-weight: 500;
+    background: var(--surface);
+}
+
+.form-control:focus,
+.form-select:focus {
+    border-color: var(--brand-primary);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+.form-label {
+    font-weight: 600;
+    color: var(--text-main);
+    margin-bottom: 0.5rem;
+}
+
+/* ==================== MEJORAS EN FORMULARIOS ==================== */
+.form-control.border-2,
+.form-select.border-2 {
+    border-width: 2px !important;
+    padding: 0.85rem 1.1rem;
+    font-weight: 500;
+}
+
+.form-control.form-control-lg,
+.form-select.form-select-lg {
+    padding: 0.9rem 1.2rem;
+    font-size: 1rem;
+    border-radius: var(--radius-md);
+}
+
+.form-check {
+    margin-bottom: 0.75rem;
+}
+
+.form-check-input {
+    width: 1.35em;
+    height: 1.35em;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.form-check-input:checked {
+    background-color: var(--brand-primary);
+    border-color: var(--brand-primary);
+}
+
+/* ==================== TABLAS ==================== */
+.table {
+    --bs-table-bg: transparent;
+    --bs-table-border-color: var(--border-soft);
+}
+
+.table thead th {
+    background: var(--surface-dark);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--text-main);
+    border-bottom: 2px solid var(--border-soft);
+}
+
+.table tbody tr {
+    transition: all 0.2s ease;
+}
+
+.table tbody tr:hover {
+    background-color: var(--surface-dark);
+    box-shadow: inset 0 0 0 2px var(--border-light);
+}
+
+/* ==================== MEJORAS EN TABLAS ==================== */
+.table-responsive {
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+}
+
+.table {
+    border-collapse: collapse;
+}
+
+.table tbody td {
+    border-top: 1px solid var(--border-soft);
+    vertical-align: middle;
+    padding: 1rem;
+}
+
+.table tbody tr:first-child td {
+    border-top: none;
+}
+
+.table.table-hover tbody tr:hover {
+    background-color: var(--surface-dark) !important;
+    transform: translateY(-1px);
+}
+
+.table-light thead {
+    background: var(--surface-dark);
+}
+
+/* ==================== LISTA DE GRUPOS ==================== */
+.list-group {
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+    overflow: hidden;
+}
+
+.list-group-item {
+    border-color: var(--border-soft);
+    padding: 1rem 1.25rem;
+    transition: all 0.2s ease;
+}
+
+.list-group-item:hover {
+    background-color: var(--surface-dark);
+    transform: translateX(4px);
+}
+
+.list-group-item.active {
+    background: linear-gradient(135deg, var(--brand-primary), var(--brand-primary-dark));
+    border-color: var(--brand-primary);
+}
+
+/* ==================== ALERTAS ==================== */
+.alert {
+    border: none;
+    border-radius: var(--radius-lg);
+    border-left: 4px solid;
+    font-weight: 500;
+}
+
+.alert-warning {
+    background: linear-gradient(90deg, #fffbeb 0%, #fef3c7 100%);
+    border-left-color: var(--brand-secondary);
+    color: #92400e;
+}
+
+.alert-success {
+    background: linear-gradient(90deg, #f0fdf4 0%, #dcfce7 100%);
+    border-left-color: var(--brand-accent);
+    color: #166534;
+}
+
+.alert-danger {
+    background: linear-gradient(90deg, #fef2f2 0%, #fee2e2 100%);
+    border-left-color: #dc2626;
+    color: #7f1d1d;
+}
+
+/* ==================== SIDEBAR DEL CATÁLOGO ==================== */
+.catalog-sidebar {
+    background: linear-gradient(180deg, var(--surface) 0%, var(--surface-soft) 100%);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+}
+
+.catalog-sidebar .card-body {
+    border-left: 5px solid var(--brand-primary);
+    padding: 1.5rem;
+}
+
+.catalog-sidebar h5 {
+    color: var(--text-main);
+    font-size: 1.1rem;
+}
+
+.catalog-type-item {
+    font-weight: 600;
+    border-radius: 8px;
+    margin-bottom: 0.5rem;
+    padding: 0.85rem 1rem !important;
+    background: var(--surface-soft);
+    border: 2px solid transparent;
+    transition: all 0.2s ease;
+}
+
+.catalog-type-item:hover {
+    background: linear-gradient(135deg, #eff6ff, #dbeafe);
+    color: var(--brand-primary);
+    border-color: var(--brand-primary);
+    transform: translateX(4px);
+}
+
+.badge {
+    font-size: 0.7rem;
+    font-weight: 700;
+    padding: 0.4rem 0.7rem;
+}
+
+/* ==================== CATEGORÍAS ==================== */
+.category-badge {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    background: linear-gradient(135deg, var(--brand-primary), var(--brand-primary-dark));
+    color: white;
+    border-radius: var(--radius-md);
+    font-weight: 600;
+    margin-right: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+/* ==================== SECCIÓN DE DESTACADOS ==================== */
+.highlighted-section {
+    background: linear-gradient(135deg, #fff7ed 0%, #fed7aa 100%);
+    border-radius: var(--radius-lg);
+    border: 2px solid var(--brand-secondary);
+    padding: 2rem;
+    margin-bottom: 2rem;
+}
+
+.highlighted-section h2 {
+    color: #92400e;
+    font-weight: 800;
+}
+
+/* ==================== GALERÍA DE PRODUCTOS ==================== */
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 2rem;
+    margin-top: 1.5rem;
+}
+
+/* Ajustes para que el contenido central no quede centrado con márgenes enormes */
+.catalog-container {
+    max-width: none;
+    width: 100%;
+    margin-left: 0;
+    padding-left: 0;
+}
+
+/* Eliminar márgenes negativos de la fila y padding de las columnas para usar todo el ancho */
+.row.catalog-container {
+    margin-left: 0;
+    margin-right: 0;
+}
+
+/* Quitar padding horizontal en la columna del sidebar para que quede pegada al borde */
+.row.catalog-container > .col-lg-3 {
+    padding-left: 0;
+    padding-right: 0;
+}
+
+.catalog-main {
+    margin-left: 0.5rem;
+}
+
+.product-card {
+    cursor: pointer;
+}
+
+.product-card .card-img-top {
+    overflow: hidden;
+    height: 280px;
+}
+
+.product-card .card-img-top img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.product-card:hover .card-img-top img {
+    transform: scale(1.08);
+}
+
+.product-price {
+    background: linear-gradient(135deg, var(--brand-accent), #059669);
+    color: white;
+    padding: 0.75rem;
+    border-radius: 8px;
+    font-weight: 700;
+    font-size: 1.2rem;
+}
+
+/* ==================== FOOTER ==================== */
+.app-footer {
+    background: linear-gradient(90deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+    color: #d1d5db;
+    margin-top: auto;
+}
+
+.app-footer h5,
+.app-footer h6 {
+    color: white;
+}
+
+.hover-link {
+    transition: all 0.2s ease;
+}
+
+.hover-link:hover {
+    color: var(--brand-primary) !important;
+    transform: translateX(4px);
+    display: inline-block;
+}
+
+.app-footer hr {
+    margin: 1.5rem 0;
+}
+
+/* ==================== UTILIDADES ==================== */
+.text-muted,
+.form-text {
+    color: var(--text-muted) !important;
+}
+
+.text-truncate-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.shadow-sm {
+    box-shadow: var(--shadow-sm) !important;
+}
+
+.shadow {
+    box-shadow: var(--shadow-soft) !important;
+}
+
+/* ==================== RESPONSIVE ==================== */
+@media (max-width: 1200px) {
+    .product-grid {
+        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+        gap: 1.5rem;
+    }
+}
+
+@media (max-width: 992px) {
+    .navbar-brand {
+        font-size: 1.2rem;
+    }
+
+    .product-grid {
+        grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+        gap: 1.2rem;
+    }
+
+    .btn-group {
+        flex-wrap: wrap;
+    }
+
+    .btn-group .btn {
+        flex: 1 1 calc(50% - 0.125rem);
+    }
+}
+
+@media (max-width: 768px) {
+    :root {
+        --radius-lg: 12px;
+        --radius-md: 8px;
+    }
+
+    .app-navbar {
+        padding: 0.75rem 0;
+    }
+
+    .btn {
+        padding: 0.5rem 1rem;
+        font-size: 0.9rem;
+    }
+
+    .btn-lg {
+        padding: 0.65rem 1.2rem;
+        font-size: 1rem;
+    }
+
+    .card-body {
+        padding: 1rem;
+    }
+
+    .product-grid {
+        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+        gap: 0.8rem;
+    }
+
+    .highlighted-section {
+        padding: 1.5rem;
+    }
+
+    .table-responsive {
+        font-size: 0.85rem;
+    }
+
+    .table tbody td {
+        padding: 0.75rem 0.5rem;
+    }
+
+    .d-flex.justify-content-between {
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .d-flex.align-items-center {
+        flex-direction: column;
+        text-align: center;
+    }
+}
+
+@media (max-width: 576px) {
+    .container-lg {
+        padding-left: 0.75rem;
+        padding-right: 0.75rem;
+    }
+
+    .product-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.5rem;
+    }
+
+    .card-body {
+        padding: 0.75rem;
+    }
+
+    .btn {
+        padding: 0.4rem 0.8rem;
+        font-size: 0.85rem;
+    }
+
+    .display-5 {
+        font-size: 2rem;
+    }
+
+    h1, h2 {
+        font-size: 1.5rem;
+    }
+}
+
+/* ==================== BREADCRUMB ==================== */
+.breadcrumb {
+    background: transparent;
+    border: none;
+    padding: 0;
+}
+
+.breadcrumb-item {
+    margin-right: 0.5rem;
+}
+
+.breadcrumb-item.active {
+    color: var(--text-main);
+    font-weight: 600;
+}
+
+.breadcrumb-item a {
+    color: var(--brand-primary);
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+.breadcrumb-item a:hover {
+    text-decoration: underline;
+    color: var(--brand-primary-dark);
+}
+
+/* ==================== INPUT GROUP ==================== */
+.input-group {
+    box-shadow: var(--shadow-sm);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+}
+
+.input-group-text {
+    background: white;
+    border: 1.5px solid var(--border-soft);
+    font-weight: 600;
+    color: var(--text-muted);
+}
+
+.input-group .form-control {
+    border-right: none;
+}
+
+/* ==================== DIVIDER CON TEXTO ==================== */
+.position-relative hr {
+    margin-top: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+/* ==================== BADGES MEJORADOS ==================== */
+.badge {
+    font-size: 0.75rem;
+    padding: 0.5rem 0.9rem;
+    border-radius: 6px;
+    letter-spacing: 0.5px;
+}
+
+.badge.text-bg-primary {
+    background: linear-gradient(135deg, var(--brand-primary), var(--brand-primary-dark)) !important;
+}
+
+.badge.text-bg-secondary {
+    background: linear-gradient(135deg, #6b7280, #4b5563) !important;
+}
+
+.badge.text-bg-success {
+    background: linear-gradient(135deg, var(--brand-accent), #059669) !important;
+}
+
+.badge.text-bg-warning {
+    background: linear-gradient(135deg, var(--brand-secondary), #f97316) !important;
+}
+
+.badge.text-bg-danger {
+    background: linear-gradient(135deg, #dc2626, #b91c1c) !important;
+}
+
+.badge.text-bg-info {
+    background: linear-gradient(135deg, #0ea5e9, #0284c7) !important;
+}
+
+/* ==================== ANIMACIONES ==================== */
+@keyframes slideInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.card {
+    animation: slideInUp 0.3s ease-out;
+}
+
+/* ==================== MEJORAS EN NAVBAR ==================== */
+.navbar-toggler {
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    transition: all 0.2s ease;
+}
+
+.navbar-toggler:hover {
+    border-color: white;
+}
+
+/* ==================== BORDES Y SOMBRAS PROFESIONALES ==================== */
+.border-2 {
+    border-width: 2px !important;
+}
+
+.border-opacity-25 {
+    opacity: 0.25;
+}
+
+.bg-gradient {
+    background: linear-gradient(135deg, rgba(0,0,0,0.1), rgba(0,0,0,0.05));
+}
+
+/* ==================== SIDEBAR ESTILO AMAZON ==================== */
+
+/* Botón toggle sidebar (móvil) */
+.sidebar-toggle-btn {
+    position: sticky;
+    top: 0;
+    z-index: 99;
+    padding: 0.75rem;
+    background: linear-gradient(90deg, #232f3e 0%, #1e2939 100%);
+    border-bottom: 2px solid #f59e0b;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.sidebar-toggle-btn .btn {
+    width: 55px;
+    height: 55px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    background: linear-gradient(135deg, #232f3e, #1e2939);
+    color: white;
+    border: 2px solid #f59e0b;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.sidebar-toggle-btn .btn:hover {
+    background: linear-gradient(135deg, #1e2939, #0f172a);
+    border-color: white;
+    transform: scale(1.05);
+}
+
+.sidebar-toggle-btn .btn:active {
+    transform: scale(0.98);
+}
+
+/* Overlay del sidebar */
+.sidebar-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1030;
+    backdrop-filter: blur(2px);
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.sidebar-overlay.show {
+    pointer-events: auto;
+    opacity: 1;
+}
+
+/* Sidebar principal */
+.sidebar-menu {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 350px;
+    height: 100%;
+    background: white;
+    z-index: 1040;
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.2);
+    transform: translateX(-100%);
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.sidebar-menu.show {
+    transform: translateX(0);
+}
+
+/* Header del sidebar */
+.sidebar-header {
+    background: #232f3e;
+    color: white;
+    padding: 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-shrink: 0;
+    border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+}
+
+.sidebar-user {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-weight: 600;
+}
+
+.sidebar-user i {
+    font-size: 1.8rem;
+}
+
+.btn-close-sidebar {
+    background: rgba(255, 255, 255, 0.2);
+    border: 2px solid white;
+    color: white;
+    font-size: 1.2rem;
+    cursor: pointer;
+    padding: 0;
+    width: 45px;
+    height: 45px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    border-radius: 6px;
+    font-weight: bold;
+}
+
+.btn-close-sidebar:hover {
+    background: rgba(255, 255, 255, 0.3);
+    border-color: white;
+    transform: rotate(90deg);
+}
+
+/* Contenido del sidebar */
+.sidebar-content {
+    overflow-y: auto;
+    flex: 1;
+    padding: 1rem 0;
+}
+
+/* Secciones del sidebar */
+.sidebar-section {
+    padding: 1rem;
+}
+
+.sidebar-section-title {
+    font-weight: 700;
+    font-size: 0.95rem;
+    color: var(--text-main);
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Lista de menú */
+.sidebar-menu-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.sidebar-menu-list li {
+    margin: 0;
+}
+
+.sidebar-menu-list a {
+    display: flex;
+    align-items: center;
+    padding: 0.75rem 1rem;
+    color: var(--text-main);
+    text-decoration: none;
+    transition: all 0.2s ease;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.sidebar-menu-list a:hover {
+    background-color: var(--surface-dark);
+    color: var(--brand-primary);
+    transform: translateX(4px);
+}
+
+.sidebar-menu-list i:last-child {
+    margin-left: auto;
+    font-size: 0.75rem;
+    color: var(--text-muted);
+}
+
+/* Dividers */
+.sidebar-divider {
+    margin: 0;
+    border-color: var(--border-soft);
+}
+
+/* Filtros de talla */
+.sidebar-size-filter {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.5rem;
+    padding: 0 1rem;
+}
+
+.size-btn {
+    padding: 0.6rem;
+    border: 1.5px solid var(--border-soft);
+    background: white;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.2s ease;
+    font-size: 0.9rem;
+}
+
+.size-btn:hover {
+    border-color: var(--brand-primary);
+    color: var(--brand-primary);
+}
+
+.size-btn:active {
+    background: var(--brand-primary);
+    color: white;
+    border-color: var(--brand-primary);
+}
+
+/* Desktop sidebar */
+.desktop-sidebar {
+    position: sticky;
+    top: 6rem;
+    background: white;
+    border-radius: var(--radius-lg);
+    padding: 1.5rem;
+    box-shadow: var(--shadow-sm);
+    max-height: calc(100vh - 8rem);
+    overflow-y: auto;
+}
+/* Hacer la sidebar un poco más ancha y pegada al borde */
+.desktop-sidebar {
+    width: 280px;
+}
+
+.desktop-sidebar .sidebar-section {
+    padding: 0;
+    margin-bottom: 1.5rem;
+}
+
+.desktop-sidebar .sidebar-section:last-child {
+    margin-bottom: 0;
+}
+
+/* Scrollbar personalizado */
+.sidebar-content::-webkit-scrollbar,
+.desktop-sidebar::-webkit-scrollbar {
+    width: 6px;
+}
+
+.sidebar-content::-webkit-scrollbar-track,
+.desktop-sidebar::-webkit-scrollbar-track {
+    background: var(--surface-soft);
+}
+
+.sidebar-content::-webkit-scrollbar-thumb,
+.desktop-sidebar::-webkit-scrollbar-thumb {
+    background: var(--border-soft);
+    border-radius: 3px;
+}
+
+.sidebar-content::-webkit-scrollbar-thumb:hover,
+.desktop-sidebar::-webkit-scrollbar-thumb:hover {
+    background: var(--text-muted);
+}
+
+/* Responsive */
+@media (max-width: 991px) {
+    .sidebar-menu {
+        width: 80%;
+        max-width: 350px;
+    }
+}
+
+@media (min-width: 1200px) {
+    /* En pantallas grandes, reducir el espacio en blanco lateral y aprovechar más el ancho */
+    .container-fluid.py-4.px-4 {
+        max-width: 1600px;
+        margin-left: 0;
+        margin-right: 0;
+    }
+    .catalog-container {
+        max-width: 1600px;
+    }
+}
+
+/* ======= Desktop: sidebar fija a la izquierda y ocupa todo el costado ======= */
+@media (min-width: 992px) {
+    /* Hacer que la sidebar de escritorio sea sticky y ocupe la altura visible (en flujo) */
+    .desktop-sidebar {
+        position: sticky;
+        top: 72px; /* dejar espacio para la navbar sticky */
+        width: 280px;
+        max-height: calc(100vh - 96px);
+        overflow-y: auto;
+        border-top-left-radius: 0;
+        border-bottom-left-radius: 0;
+    }
+
+    /* El contenido principal usa las columnas de la grid; eliminar margin-left aplicado anteriormente */
+    .catalog-main {
+        margin-left: 0;
+    }
+
+    /* Asegurar que el mobile overlay sidebar no interfiera */
+    nav.sidebar-menu {
+        display: none; /* solo usar versión desktop en pantallas grandes */
+    }
+
+    /* Ocultar botones de colapso en escritorio (no debe cerrarse) */
+    .desktop-collapse-toggle, .collapse-inner {
+        display: none !important;
+    }
+
+    /* Evitar que .sidebar-collapsed o toggles oculten la desktop sidebar */
+    .sidebar-collapsed .desktop-sidebar {
+        transform: none !important;
+        opacity: 1 !important;
+        pointer-events: auto !important;
+    }
+
+    .sidebar-collapsed .catalog-main {
+        margin-left: 320px !important;
+    }
+}
+
+@media (max-width: 576px) {
+    .sidebar-menu {
+        width: 100%;
+        max-width: 100%;
+    }
+}
+
+/* ==================== DESKTOP COLLAPSE (ocultar sidebar en desktop) ==================== */
+.desktop-collapse-toggle {
+    position: fixed;
+    left: 320px; /* cercano al borde derecho del sidebar */
+    top: 90px;
+    z-index: 2000;
+    align-items: center;
+    justify-content: center;
+}
+
+.desktop-collapse-toggle .btn {
+    width: 44px;
+    height: 44px;
+    border-radius: 8px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: white;
+    color: var(--text-main);
+    box-shadow: 0 6px 18px rgba(2,6,23,0.12);
+    border: 1px solid var(--border-soft);
+}
+
+/* Cuando el sidebar está colapsado mantenemos un pequeño handle visible en la izquierda */
+.sidebar-collapsed .desktop-collapse-toggle {
+    left: 6px;
+    top: 100px;
+}
+
+.sidebar-collapsed .desktop-collapse-toggle .btn {
+    background: linear-gradient(90deg, var(--brand-primary), var(--brand-primary-dark));
+    color: white;
+    border-color: transparent;
+}
+
+/* Botón interno dentro del sidebar para colapsar */
+.collapse-inner {
+    position: absolute;
+    right: -22px;
+    top: 20px;
+    z-index: 2100;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    border-radius: 8px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 6px 18px rgba(2,6,23,0.12);
+}
+
+.collapse-inner i {
+    transition: transform 0.25s ease;
+}
+
+.sidebar-collapsed .collapse-inner i {
+    transform: rotate(180deg);
+}
+
+.sidebar-collapsed .desktop-sidebar {
+    transform: translateX(-100%);
+    opacity: 0;
+    pointer-events: none;
+}
+
+.sidebar-collapsed .catalog-main {
+    margin-left: 0 !important;
+}
+
+/* Ajuste del icono cuando está colapsado */
+.sidebar-collapsed #desktopCollapseIcon {
+    transform: rotate(180deg);
+}
+

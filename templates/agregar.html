@@ -1,74 +1,157 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Agregar Prenda</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
-<body class="bg-light">
+{% extends 'base.html' %}
 
-<div class="container mt-5">
+{% block title %}Agregar Nueva Prenda - Tienda de Ropa Premium{% endblock %}
+
+{% block content %}
     <div class="row justify-content-center">
         <div class="col-md-8">
-            <div class="card shadow">
-                <div class="card-header bg-dark text-white text-center">
-                    <h4>Agregar Nueva Prenda al Catálogo</h4>
+            <!-- Header -->
+            <div class="mb-4">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="/" class="text-primary text-decoration-none">Catálogo</a></li>
+                        <li class="breadcrumb-item"><a href="/inventario" class="text-primary text-decoration-none">Inventario</a></li>
+                        <li class="breadcrumb-item active">Agregar Prenda</li>
+                    </ol>
+                </nav>
+            </div>
+
+            <!-- Card Principal -->
+            <div class="card shadow-lg border-0">
+                <!-- Header del Card -->
+                <div class="card-header bg-gradient border-0 p-4" style="background: linear-gradient(135deg, var(--brand-primary), var(--brand-primary-dark));">
+                    <div class="d-flex align-items-center">
+                        <i class="fas fa-plus-circle text-white me-3" style="font-size: 1.5rem;"></i>
+                        <div>
+                            <h5 class="text-white mb-1">Agregar Nueva Prenda</h5>
+                            <p class="text-white-50 mb-0 small">Completa el formulario para añadir un artículo al catálogo</p>
+                        </div>
+                    </div>
                 </div>
-                <div class="card-body p-4">
+
+                <!-- Body -->
+                <div class="card-body p-5">
                     <form action="/agregar" method="POST" enctype="multipart/form-data">
 
-                        <div class="mb-3">
-                            <label class="form-label fw-bold">Nombre de la prenda</label>
-                            <input type="text" name="nombre" class="form-control" required>
+                        <!-- Nombre -->
+                        <div class="mb-4">
+                            <label class="form-label fw-bold mb-2">
+                                <i class="fas fa-tag me-2 text-primary"></i>Nombre de la Prenda
+                            </label>
+                            <input
+                                type="text"
+                                name="nombre"
+                                class="form-control form-control-lg border-2"
+                                placeholder="Ej. Camiseta Premium Blue"
+                                required
+                            >
                         </div>
 
-                        <div class="mb-3">
-                            <label class="form-label fw-bold">Descripción</label>
-                            <textarea name="descripcion" class="form-control" rows="3" required></textarea>
+                        <!-- Descripción -->
+                        <div class="mb-4">
+                            <label class="form-label fw-bold mb-2">
+                                <i class="fas fa-align-left me-2 text-primary"></i>Descripción
+                            </label>
+                            <textarea
+                                name="descripcion"
+                                class="form-control form-control-lg border-2"
+                                rows="4"
+                                placeholder="Describe los características y detalles de la prenda..."
+                                required
+                            ></textarea>
                         </div>
 
-                        <div class="row">
-                            <div class="col-md-3 mb-3">
-                                <label class="form-label fw-bold">Talla</label>
-                                <select name="talla" class="form-select" required>
+                        <!-- Talla, Color, Precio, Stock -->
+                        <div class="row mb-4">
+                            <div class="col-md-3">
+                                <label class="form-label fw-bold mb-2">
+                                    <i class="fas fa-ruler me-2 text-primary"></i>Talla
+                                </label>
+                                <select name="talla" class="form-select form-select-lg border-2" required>
                                     <option value="">Selecciona...</option>
                                     <option value="XS">XS</option>
                                     <option value="S">S</option>
                                     <option value="M">M</option>
                                     <option value="L">L</option>
                                     <option value="XL">XL</option>
+                                    <option value="XXL">XXL</option>
                                 </select>
                             </div>
-                            <div class="col-md-3 mb-3">
-                                <label class="form-label fw-bold">Color</label>
-                                <input type="text" name="color" class="form-control" required>
+                            <div class="col-md-3">
+                                <label class="form-label fw-bold mb-2">
+                                    <i class="fas fa-palette me-2 text-primary"></i>Color
+                                </label>
+                                <input
+                                    type="text"
+                                    name="color"
+                                    class="form-control form-control-lg border-2"
+                                    placeholder="Ej. Azul Marino"
+                                    required
+                                >
                             </div>
-                            <div class="col-md-3 mb-3">
-                                <label class="form-label fw-bold">Precio (USD)</label>
-                                <input type="number" step="1" name="precio" class="form-control" required>
+                            <div class="col-md-3">
+                                <label class="form-label fw-bold mb-2">
+                                    <i class="fas fa-dollar-sign me-2 text-primary"></i>Precio (USD)
+                                </label>
+                                <input
+                                    type="number"
+                                    step="1"
+                                    name="precio"
+                                    class="form-control form-control-lg border-2"
+                                    placeholder="49.99"
+                                    required
+                                >
                             </div>
-                            <div class="col-md-3 mb-3">
-                                <label class="form-label fw-bold">Stock</label>
-                                <input type="number" step="1" name="stock" class="form-control" required value="1" min="0">
+                            <div class="col-md-3">
+                                <label class="form-label fw-bold mb-2">
+                                    <i class="fas fa-boxes me-2 text-primary"></i>Stock
+                                </label>
+                                <input
+                                    type="number"
+                                    step="1"
+                                    name="stock"
+                                    class="form-control form-control-lg border-2"
+                                    value="1"
+                                    min="0"
+                                    required
+                                >
                             </div>
                         </div>
 
+                        <!-- Imagen -->
                         <div class="mb-4">
-                            <label class="form-label fw-bold">Fotografía de la prenda (.jpg, .png)</label>
-                            <input type="file" name="imagen" class="form-control" accept=".jpg, .jpeg, .png" required>
+                            <label class="form-label fw-bold mb-2">
+                                <i class="fas fa-image me-2 text-primary"></i>Fotografía de la Prenda
+                            </label>
+                            <div class="input-group input-group-lg">
+                                <input
+                                    type="file"
+                                    name="imagen"
+                                    class="form-control border-2"
+                                    accept=".jpg, .jpeg, .png"
+                                    id="fileInput"
+                                    required
+                                >
+                                <span class="input-group-text border-2 text-muted">JPG, PNG</span>
+                            </div>
+                            <small class="text-muted mt-2 d-block">
+                                <i class="fas fa-info-circle me-1"></i>
+                                Sube una imagen clara de alta calidad (recomendado: 600x600px)
+                            </small>
                         </div>
 
-                        <div class="d-grid gap-2">
-                            <button type="submit" class="btn btn-success">Guardar Prenda</button>
-                            <a href="/inventario" class="btn btn-outline-secondary">Cancelar y volver al inventario</a>
+                        <!-- Acciones -->
+                        <div class="d-grid gap-2 mb-3">
+                            <button type="submit" class="btn btn-primary btn-lg fw-bold">
+                                <i class="fas fa-check-circle me-2"></i>Guardar Prenda
+                            </button>
+                            <a href="/inventario" class="btn btn-outline-secondary btn-lg fw-bold">
+                                <i class="fas fa-times me-2"></i>Cancelar
+                            </a>
                         </div>
                     </form>
                 </div>
             </div>
         </div>
     </div>
-</div>
-
-</body>
-</html>
+{% endblock %}

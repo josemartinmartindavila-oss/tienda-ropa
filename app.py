@@ -13,7 +13,9 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///tienda.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['UPLOAD_FOLDER'] = os.path.join(app.root_path, 'static/uploads')
 # Clave secreta obligatoria para mantener las sesiones de los usuarios seguras
-app.config['SECRET_KEY'] = 'mi_clave_secreta_super_segura'
+# app.config['SECRET_KEY'] = 'mi_clave_secreta_super_segura'
+import secrets
+app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', secrets.token_hex(16))
 
 os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
 
@@ -37,6 +39,8 @@ class Usuario(UserMixin, db.Model):
     nombre = db.Column(db.String(100), nullable=False)
     correo = db.Column(db.String(100), unique=True, nullable=False)
     password = db.Column(db.String(255), nullable=False)
+    # Nueva columna para roles: 'admin' o 'cliente'
+    rol = db.Column(db.String(20), default='cliente')
 
 # Tabla 2: Prendas
 class Prenda(db.Model):
@@ -51,7 +55,42 @@ class Prenda(db.Model):
 
 # Crear tablas al iniciar
 with app.app_context():
-    db.create_all()
+    # # db.create_all()
+
+
+    # Lógica para manejar cambios en el modelo y evitar errores de base de datos desactualizada
+    try:
+        db.create_all()
+        # Intentamos buscar el admin para verificar que la columna 'rol' exista
+        admin_existente = Usuario.query.filter_by(rol='admin').first()
+    except Exception:
+        # Si falla (ej. falta la columna 'rol'), limpiamos y recreamos la base de datos
+        db.drop_all()
+        db.create_all()
+        admin_existente = None
+
+    # Agregamos un usuario administrador por defecto si no existe ninguno en la BD.
+    # if not Usuario.query.filter_by(rol='admin').first():
+    if not admin_existente:
+        # Credenciales iniciales: correo 'admin@tienda.com' y contraseña 'admin123'
+        password_admin = generate_password_hash('admin123')
+        usuario_admin = Usuario(
+            # nombre='Administrador Central',
+            nombre='Administrador',
+            correo='admin@tienda.com',
+            password=password_admin,
+            rol='admin'
+        )
+        db.session.add(usuario_admin)
+        db.session.commit()
+
+    # Agregamos productos de prueba (dummies) si la tabla está vacía
+    if Prenda.query.count() == 0:
+        p1 = Prenda(nombre='Camiseta Básica', descripcion='Camiseta de algodón esencial', talla='M', color='Negro', precio=15.99, stock=50, imagen='default.png')
+        p2 = Prenda(nombre='Pantalón Vaquero', descripcion='Jeans resistentes de corte recto', talla='30', color='Azul', precio=39.95, stock=30, imagen='default.png')
+        p3 = Prenda(nombre='Sudadera Hoodie', descripcion='Gris jaspeado con capucha', talla='L', color='Gris', precio=25.50, stock=20, imagen='default.png')
+        db.session.add_all([p1, p2, p3])
+        db.session.commit()
 
 
 # Catálogo, Búsqueda
@@ -79,12 +118,21 @@ def index():
 @app.route('/inventario')
 @login_required
 def inventario():
+    # Verificamos si el usuario es administrador
+    if current_user.rol != 'admin':
+        flash('No tienes permisos para acceder al inventario.')
+        return redirect(url_for('index'))
     prendas_guardadas = Prenda.query.all()
     return render_template('inventario.html', prendas=prendas_guardadas)
 
 @app.route('/agregar', methods=['GET', 'POST'])
 @login_required
 def agregar_prenda():
+    # Verificamos si el usuario es administrador
+    if current_user.rol != 'admin':
+        flash('Acceso denegado.')
+        return redirect(url_for('index'))
+
     if request.method == 'POST':
         file = request.files['imagen']
         if file and file.filename != '':
@@ -111,6 +159,11 @@ def agregar_prenda():
 @app.route('/editar/<int:id>', methods=['GET', 'POST'])
 @login_required
 def editar_prenda(id):
+    # Verificamos si el usuario es administrador
+    if current_user.rol != 'admin':
+        flash('Acceso denegado.')
+        return redirect(url_for('index'))
+
     prenda_a_editar = Prenda.query.get_or_404(id)
 
     if request.method == 'POST':
@@ -135,6 +188,11 @@ def editar_prenda(id):
 @app.route('/eliminar/<int:id>', methods=['POST'])
 @login_required
 def eliminar_prenda(id):
+    # Verificamos si el usuario es administrador
+    if current_user.rol != 'admin':
+        flash('Acceso denegado.')
+        return redirect(url_for('index'))
+
     prenda_a_eliminar = Prenda.query.get_or_404(id)
     db.session.delete(prenda_a_eliminar)
     db.session.commit()
@@ -161,9 +219,20 @@ def registro():
             flash('Ese correo ya está registrado. Intenta iniciar sesión.')
             return redirect(url_for('registro'))
 
-        password_encriptada = generate_password_hash(password, method='pbkdf2:sha256')
+        # password_encriptada = generate_password_hash(password, method='pbkdf2:sha256')
+        # Usamos el método por defecto para mayor compatibilidad
+        password_encriptada = generate_password_hash(password)
 
-        nuevo_usuario = Usuario(nombre=nombre, correo=correo, password=password_encriptada)
+        # nuevo_usuario = Usuario(nombre=nombre, correo=correo, password=password_encriptada)
+        # El primer usuario registrado será admin automáticamente para facilitar pruebas
+        # rol_asignado = 'admin' if Usuario.query.count() == 0 else 'cliente'
+        
+        # Al tener ya un admin creado por defecto en el arranque, todos los nuevos registros serán clientes
+        rol_asignado = 'cliente'
+        nuevo_usuario = Usuario(nombre=nombre, 
+                                correo=correo, 
+                                password=password_encriptada, 
+                                rol=rol_asignado)
         db.session.add(nuevo_usuario)
         db.session.commit()
 
@@ -182,7 +251,12 @@ def login():
 
         if usuario and check_password_hash(usuario.password, password):
             login_user(usuario)
-            return redirect(url_for('inventario'))
+            # return redirect(url_for('inventario'))
+            # Redirección inteligente según el rol
+            if usuario.rol == 'admin':
+                return redirect(url_for('inventario'))
+            else:
+                return redirect(url_for('index'))
         else:
             flash('Correo o contraseña incorrectos. Inténtalo de nuevo.')
             return redirect(url_for('login'))

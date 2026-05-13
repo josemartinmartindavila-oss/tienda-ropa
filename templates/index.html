@@ -1,112 +1,387 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tienda de Ropa - Catálogo</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
-<body class="bg-light">
+{% extends 'base.html' %}
 
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4 shadow-sm">
-    <div class="container">
-        <a class="navbar-brand fw-bold" href="/">👕 Mi Tienda</a>
-        <div class="d-flex align-items-center">
-            {% if current_user.is_authenticated %}
-            <span class="navbar-text me-3 text-white fw-bold">Hola, {{ current_user.nombre }}</span>
-            <a href="/inventario" class="btn btn-outline-light me-2">📦 Inventario</a>
-            <a href="/logout" class="btn btn-danger">Cerrar Sesión</a>
-            {% else %}
-            <a href="/login" class="btn btn-outline-light me-2">🔑 Iniciar Sesión</a>
-            <a href="/registro" class="btn btn-primary">Registrarse</a>
-            {% endif %}
-        </div>
+{% block title %}Catálogo - Tienda de Ropa Premium{% endblock %}
+
+{% block content %}
+    <!-- Botón Toggle Sidebar (visible en móvil/tablet) -->
+    <div class="sidebar-toggle-btn d-lg-none">
+        <button type="button" class="btn btn-dark rounded-0" id="sidebarToggle" title="Abrir menú">
+            <i class="fas fa-bars"></i>
+        </button>
     </div>
-</nav>
 
-<div class="container mt-4">
+    <!-- Overlay para cerrar sidebar -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
-    <form action="/" method="GET" class="mb-5">
-        <div class="input-group input-group-lg shadow-sm">
-            <input type="text" name="buscar" class="form-control border-primary" placeholder="Buscar prenda por nombre..." value="{{ busqueda or '' }}">
-            <button type="submit" class="btn btn-primary">🔍 Buscar</button>
+    <!-- Sidebar Principal -->
+    <nav class="sidebar-menu" id="sidebarPanel">
+        <!-- Header con botón cerrar -->
+        <div class="sidebar-header">
+            <div class="sidebar-user">
+                <i class="fas fa-user-circle"></i>
+                <span>Menú</span>
+            </div>
+            <button type="button" class="btn-close-sidebar" id="closeSidebarBtn" title="Cerrar">
+                <i class="fas fa-times"></i>
+            </button>
         </div>
-    </form>
 
-    {% if destacadas and not busqueda %}
-    <div class="mb-5 p-4 bg-warning bg-opacity-10 rounded-3 border border-warning shadow-sm">
-        <h2 class="display-6 fw-bold text-warning mb-4">⭐ Novedades Destacadas</h2>
-        <div class="row row-cols-1 row-cols-md-3 g-4">
-            {% for prenda in destacadas %}
-            <div class="col">
-                <div class="card h-100 shadow border-warning border-2">
-                    <img src="{{ url_for('static', filename='uploads/' + prenda.imagen) }}" class="card-img-top" alt="{{ prenda.nombre }}" style="height: 250px; object-fit: cover;">
-                    <div class="card-body bg-white text-center">
-                        <h5 class="card-title fw-bold">{{ prenda.nombre }}</h5>
-                        <h4 class="text-success fw-bold">${{ prenda.precio | int }} USD</h4>
-                    </div>
-                    <div class="card-footer bg-warning border-0 text-center p-0">
-                        <a href="/prenda/{{ prenda.id }}" class="btn btn-warning text-dark w-100 fw-bold py-2">Ver Detalles</a>
-                    </div>
+        <!-- Contenido del Sidebar -->
+        <div class="sidebar-content">
+            <!-- Categorías principales -->
+            <div class="sidebar-section">
+                <h6 class="sidebar-section-title">Categorías</h6>
+                <ul class="sidebar-menu-list">
+                    <li><a href="#"><i class="fas fa-shirt me-2"></i>Camisetas <i class="fas fa-chevron-right ms-auto"></i></a></li>
+                    <li><a href="#"><i class="fas fa-pants me-2"></i>Pantalones <i class="fas fa-chevron-right ms-auto"></i></a></li>
+                    <li><a href="#"><i class="fas fa-jacket me-2"></i>Chaquetas <i class="fas fa-chevron-right ms-auto"></i></a></li>
+                    <li><a href="#"><i class="fas fa-hoodie me-2"></i>Sudaderas <i class="fas fa-chevron-right ms-auto"></i></a></li>
+                    <li><a href="#"><i class="fas fa-ring me-2"></i>Accesorios <i class="fas fa-chevron-right ms-auto"></i></a></li>
+                </ul>
+            </div>
+
+            <hr class="sidebar-divider">
+
+            <!-- Filtros de Talla -->
+            <div class="sidebar-section">
+                <h6 class="sidebar-section-title">Tallas</h6>
+                <div class="sidebar-size-filter">
+                    <button class="size-btn">XS</button>
+                    <button class="size-btn">S</button>
+                    <button class="size-btn">M</button>
+                    <button class="size-btn">L</button>
+                    <button class="size-btn">XL</button>
+                    <button class="size-btn">XXL</button>
                 </div>
             </div>
-            {% endfor %}
-        </div>
-    </div>
-    {% endif %}
 
-    <div class="text-center mb-4">
-        <h2 class="display-6 fw-bold">
-            {% if busqueda %}
-            Resultados para: <span class="text-primary">"{{ busqueda }}"</span>
-            {% else %}
-            Nuestro Catálogo Completo 👕
-            {% endif %}
-        </h2>
-        {% if not busqueda %}
-        <p class="lead text-muted">Explora toda la ropa disponible en nuestra tienda.</p>
-        {% endif %}
-    </div>
+            <hr class="sidebar-divider">
 
-    <div class="row row-cols-1 row-cols-md-3 g-4 mb-5">
+            <!-- Filtros de Precio -->
+            <div class="sidebar-section">
+                <h6 class="sidebar-section-title">Rango de Precio</h6>
+                <ul class="sidebar-menu-list">
+                    <li><a href="#">$0 - $25</a></li>
+                    <li><a href="#">$25 - $50</a></li>
+                    <li><a href="#">$50 - $100</a></li>
+                    <li><a href="#">$100+</a></li>
+                </ul>
+            </div>
 
-        {% for prenda in prendas %}
-        <div class="col">
-            <div class="card h-100 shadow-sm">
-                <img src="{{ url_for('static', filename='uploads/' + prenda.imagen) }}" class="card-img-top" alt="{{ prenda.nombre }}" style="height: 300px; object-fit: cover;">
+            <hr class="sidebar-divider">
 
-                <div class="card-body">
-                    <h5 class="card-title fw-bold">{{ prenda.nombre }}</h5>
-                    <p class="card-text text-muted text-truncate">{{ prenda.descripcion }}</p>
-
-                    <ul class="list-group list-group-flush mb-3">
-                        <li class="list-group-item"><strong>Talla:</strong> {{ prenda.talla }}</li>
-                        <li class="list-group-item"><strong>Color:</strong> {{ prenda.color }}</li>
-                        <li class="list-group-item text-success fw-bold"><strong>Precio:</strong> ${{ prenda.precio | int }} USD</li>
-                    </ul>
-                </div>
-
-                <div class="card-footer bg-white text-center border-0 mb-2">
-                    <a href="/prenda/{{ prenda.id }}" class="btn btn-outline-dark w-100">Ver Detalles</a>
-                </div>
+            <!-- Otras opciones -->
+            <div class="sidebar-section">
+                <h6 class="sidebar-section-title">Más Opciones</h6>
+                <ul class="sidebar-menu-list">
+                    <li><a href="#">Ofertas Especiales</a></li>
+                    <li><a href="#">Lo Más Vendido</a></li>
+                    <li><a href="#">Novedades</a></li>
+                </ul>
             </div>
         </div>
+    </nav>
 
-        {% else %}
-        <div class="col-12 text-center mt-5">
-            <h4 class="text-muted">Aún no hay prendas o no se encontraron resultados.</h4>
-            {% if busqueda %}
-            <a href="/" class="btn btn-primary mt-3">Volver al catálogo completo</a>
-            {% else %}
-            {% if current_user.is_authenticated %}
-            <a href="/inventario" class="btn btn-primary mt-3">Ir al inventario a agregar ropa</a>
-            {% endif %}
-            {% endif %}
-        </div>
-        {% endfor %}
+    <!-- (botones de colapso eliminados para que la sidebar no se cierre en escritorio) -->
 
+    <!-- Contenido Principal -->
+    <div class="catalog-main">
+        <div class="row g-4 align-items-start catalog-container">
+            <!-- Sidebar Desktop (visible solo en lg+) -->
+            <aside class="col-lg-3 d-none d-lg-block">
+                <div class="desktop-sidebar">
+                    <!-- (botón interno de colapso eliminado; sidebar fija en escritorio) -->
+                    <!-- Categorías -->
+                    <div class="sidebar-section">
+                        <h6 class="sidebar-section-title">Categorías</h6>
+                        <ul class="sidebar-menu-list">
+                            <li><a href="#"><i class="fas fa-shirt me-2"></i>Camisetas <i class="fas fa-chevron-right ms-auto"></i></a></li>
+                            <li><a href="#"><i class="fas fa-pants me-2"></i>Pantalones <i class="fas fa-chevron-right ms-auto"></i></a></li>
+                            <li><a href="#"><i class="fas fa-jacket me-2"></i>Chaquetas <i class="fas fa-chevron-right ms-auto"></i></a></li>
+                            <li><a href="#"><i class="fas fa-hoodie me-2"></i>Sudaderas <i class="fas fa-chevron-right ms-auto"></i></a></li>
+                            <li><a href="#"><i class="fas fa-ring me-2"></i>Accesorios <i class="fas fa-chevron-right ms-auto"></i></a></li>
+                        </ul>
+                    </div>
+
+                    <hr class="sidebar-divider">
+
+                    <!-- Filtros de Talla -->
+                    <div class="sidebar-section">
+                        <h6 class="sidebar-section-title">Tallas</h6>
+                        <div class="sidebar-size-filter">
+                            <button class="size-btn">XS</button>
+                            <button class="size-btn">S</button>
+                            <button class="size-btn">M</button>
+                            <button class="size-btn">L</button>
+                            <button class="size-btn">XL</button>
+                            <button class="size-btn">XXL</button>
+                        </div>
+                    </div>
+
+                    <hr class="sidebar-divider">
+
+                    <!-- Filtros de Precio -->
+                    <div class="sidebar-section">
+                        <h6 class="sidebar-section-title">Rango de Precio</h6>
+                        <ul class="sidebar-menu-list">
+                            <li><a href="#">$0 - $25</a></li>
+                            <li><a href="#">$25 - $50</a></li>
+                            <li><a href="#">$50 - $100</a></li>
+                            <li><a href="#">$100+</a></li>
+                        </ul>
+                    </div>
+
+                    <hr class="sidebar-divider">
+
+                    <!-- Otras opciones -->
+                    <div class="sidebar-section">
+                        <h6 class="sidebar-section-title">Más Opciones</h6>
+                        <ul class="sidebar-menu-list">
+                            <li><a href="#">Ofertas Especiales</a></li>
+                            <li><a href="#">Lo Más Vendido</a></li>
+                            <li><a href="#">Novedades</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- Contenido Principal -->
+            <section class="col-12 col-lg-9">
+            <!-- Buscador -->
+            <form action="/" method="GET" class="mb-5">
+                <div class="input-group input-group-lg shadow-sm">
+                    <span class="input-group-text bg-white border-end-0 border-2 border-primary">
+                        <i class="fas fa-search text-primary"></i>
+                    </span>
+                    <input
+                        type="text"
+                        name="buscar"
+                        class="form-control form-control-lg border-2 border-primary border-start-0"
+                        placeholder="Buscar por nombre, tipo o color..."
+                        value="{{ busqueda or '' }}"
+                    >
+                    <button type="submit" class="btn btn-primary btn-lg">Buscar</button>
+                </div>
+            </form>
+
+            <!-- Sección de Novedades Destacadas -->
+            {% if destacadas and not busqueda %}
+            <div class="highlighted-section mb-5">
+                <div class="mb-4">
+                    <h2 class="h3 fw-bold mb-1">
+                        <i class="fas fa-star me-2"></i>Novedades Destacadas
+                    </h2>
+                    <p class="text-muted small mb-0">Los mejores diseños de esta temporada</p>
+                </div>
+
+                <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-4">
+                    {% for prenda in destacadas %}
+                    <div class="col">
+                        <div class="card h-100 shadow-sm border-2 border-warning">
+                            <div class="position-relative overflow-hidden" style="height: 250px;">
+                                <img src="{{ url_for('static', filename='uploads/' + prenda.imagen) }}"
+                                     class="card-img-top w-100 h-100"
+                                     alt="{{ prenda.nombre }}"
+                                     style="object-fit: cover;">
+                                <div class="position-absolute top-0 end-0 m-3">
+                                    <span class="badge bg-warning text-dark fw-bold">
+                                        <i class="fas fa-star me-1"></i>Destacado
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="card-body text-center">
+                                <h5 class="card-title fw-bold mb-1">{{ prenda.nombre }}</h5>
+                                <p class="text-muted small mb-3 text-truncate-2">{{ prenda.descripcion }}</p>
+                                <div class="d-flex justify-content-center gap-2 mb-2 small">
+                                    <span class="badge bg-light text-dark">{{ prenda.talla }}</span>
+                                    <span class="badge bg-light text-dark">{{ prenda.color }}</span>
+                                </div>
+                            </div>
+                            <div class="card-footer bg-warning bg-opacity-10 border-0 text-center p-3">
+                                <h4 class="text-success fw-bold mb-2">${{ prenda.precio | int }} USD</h4>
+                                <a href="/prenda/{{ prenda.id }}" class="btn btn-warning text-dark w-100 fw-bold">
+                                    <i class="fas fa-eye me-1"></i>Ver Detalles
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Catálogo Completo -->
+            <div class="mb-5">
+                <div>
+                    <h2 class="h3 fw-bold mb-2">
+                        {% if busqueda %}
+                            <i class="fas fa-search me-2 text-primary"></i>Resultados para: <span class="text-primary">"{{ busqueda }}"</span>
+                        {% else %}
+                            <i class="fas fa-th me-2 text-primary"></i>Catálogo Completo
+                        {% endif %}
+                    </h2>
+                    {% if not busqueda %}
+                    <p class="lead text-muted mb-0 small">
+                        Descubre nuestra selección completa de prendas de alta calidad
+                    </p>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Grid de Productos -->
+            <div class="product-grid mb-5">
+                {% for prenda in prendas %}
+                <div class="col product-card">
+                    <div class="card h-100 shadow-sm">
+                        <!-- Imagen del Producto -->
+                        <div class="position-relative overflow-hidden" style="height: 280px;">
+                            <img src="{{ url_for('static', filename='uploads/' + prenda.imagen) }}"
+                                 class="card-img-top w-100 h-100"
+                                 alt="{{ prenda.nombre }}"
+                                 style="object-fit: cover;">
+                        </div>
+
+                        <!-- Cuerpo de la Tarjeta -->
+                        <div class="card-body">
+                            <h5 class="card-title fw-bold mb-2">{{ prenda.nombre }}</h5>
+                            <p class="card-text text-muted small text-truncate-2 mb-3">{{ prenda.descripcion }}</p>
+
+                            <!-- Detalles -->
+                            <div class="d-flex justify-content-between align-items-center mb-3 small">
+                                <span class="badge bg-light text-dark">
+                                    <i class="fas fa-ruler me-1"></i>{{ prenda.talla }}
+                                </span>
+                                <span class="badge bg-light text-dark">
+                                    <i class="fas fa-palette me-1"></i>{{ prenda.color }}
+                                </span>
+                            </div>
+
+                            <!-- Precio -->
+                            <div class="product-price text-center mb-3">
+                                ${{ prenda.precio | int }} USD
+                            </div>
+                        </div>
+
+                        <!-- Footer -->
+                        <div class="card-footer bg-white border-0 p-3 text-center">
+                            <a href="/prenda/{{ prenda.id }}" class="btn btn-primary w-100 fw-bold">
+                                <i class="fas fa-arrow-right me-1"></i>Ver Detalles
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                {% else %}
+                <!-- Estado Vacío -->
+                <div class="col-12 text-center py-5">
+                    <div class="mb-4">
+                        <i class="fas fa-box-open fa-3x text-muted opacity-50"></i>
+                    </div>
+                    <h4 class="text-muted fw-bold mb-2">No hay productos disponibles</h4>
+                    <p class="text-muted mb-4">
+                        {% if busqueda %}
+                            No encontramos resultados para "<strong>{{ busqueda }}</strong>"
+                        {% else %}
+                            Aún no hay prendas en el catálogo
+                        {% endif %}
+                    </p>
+                    <div class="d-flex gap-2 justify-content-center">
+                        {% if busqueda %}
+                        <a href="/" class="btn btn-primary">
+                            <i class="fas fa-redo me-1"></i>Volver al Catálogo
+                        </a>
+                        {% endif %}
+                        {% if current_user.is_authenticated and current_user.rol == 'admin' %}
+                        <a href="/inventario" class="btn btn-secondary">
+                            <i class="fas fa-plus me-1"></i>Agregar Prendas
+                        </a>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+
+        </section>
     </div>
-</div>
+{% endblock %}
 
-</body>
-</html>
+{% block scripts %}
+<script>
+    // Toggle del Sidebar tipo Amazon
+    document.addEventListener('DOMContentLoaded', function() {
+        const toggleBtn = document.getElementById('sidebarToggle');
+        const closeBtn = document.getElementById('closeSidebarBtn');
+        const sidebarPanel = document.getElementById('sidebarPanel');
+        const sidebarOverlay = document.getElementById('sidebarOverlay');
+
+        // Función para cerrar sidebar
+        function closeSidebar() {
+            if (sidebarPanel) {
+                sidebarPanel.classList.remove('show');
+            }
+            if (sidebarOverlay) {
+                sidebarOverlay.classList.remove('show');
+            }
+            document.body.style.overflow = 'auto';
+        }
+
+        // Función para abrir sidebar
+        function openSidebar() {
+            if (sidebarPanel) {
+                sidebarPanel.classList.add('show');
+            }
+            if (sidebarOverlay) {
+                sidebarOverlay.classList.add('show');
+            }
+            document.body.style.overflow = 'hidden';
+        }
+
+        // Abrir sidebar con click en botón
+        if (toggleBtn) {
+            toggleBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                openSidebar();
+            });
+        }
+
+        // Cerrar sidebar con botón X
+        if (closeBtn) {
+            closeBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                closeSidebar();
+            });
+        }
+
+        // Cerrar sidebar al hacer click en overlay
+        if (sidebarOverlay) {
+            sidebarOverlay.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                closeSidebar();
+            });
+        }
+
+        // Cerrar sidebar al hacer click en un item del menú
+        if (sidebarPanel) {
+            const menuItems = sidebarPanel.querySelectorAll('.sidebar-menu-list a');
+            menuItems.forEach(item => {
+                item.addEventListener('click', function(e) {
+                    closeSidebar();
+                });
+            });
+        }
+
+        // También permitir cerrar con ESC
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeSidebar();
+            }
+        });
+
+        // En desktop la sidebar es fija y no se puede colapsar
+    });
+</script>
+{% endblock %}
+
